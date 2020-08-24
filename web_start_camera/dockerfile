@@ -1,0 +1,10 @@
+from python:3.6
+
+COPY web_start_camera /home
+
+RUN pip install flask \
+    && pip install flask-cors
+
+WORKDIR      /home
+ENTRYPOINT   ["python"]
+CMD          ["server.py"]

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>demo</title>
+    <script type="text/javascript" src="static/js/api.js"></script>
+    <script type="text/javascript" src="static/js/index.js"></script>
+    <script src="static/js/sweetalert.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="static/css/index.css" />
+    <link rel="stylesheet" type="text/css" href="static/css/select.css" />
+    <link rel="stylesheet" type="text/css" href="static/css/checkbox.css" />
+    <link rel="stylesheet" type="text/css" href="static/css/radio.css" />
+    <link rel="stylesheet" type="text/css" href="static/css/loading.css" />
+  </head>
+  <body>
+    <div class="wrapper">
+      <div id="logo">
+        <img class="logo" src="static/img/react-icon.png" />
+      </div>
+      <div id="main" class="container">
+        <div class="content-wrapper header">
+          <div>
+            摄像头详细功能配置
+          </div>
+          <!-- <p style = "font-size: 16px;">
+          点击“提交”按钮提交配置
+        </p> -->
+        </div>
+        <div class="content-wrapper dd-height hoverable">
+          <!-- <h5>选择摄像头填写摄像头地址</h5> -->
+          <div class="drop-down">
+            <div class="dd-id-status">
+              <div class="dd-id">
+                <label class="camlabel">摄像头ID</label>
+                <select
+                  class="select-css"
+                  name="cars"
+                  id="camIDs"
+                  onchange="handleChange(this)"
+                >
+                  <option style="color: #dddddd;" value="" selected disabled
+                    >请选择</option
+                  >
+                </select>
+              </div>
+              <div>
+                <label style="color: #fff;" class="camlabel">运行状态</label>
+                <div id="status" style="display: flex;">
+                  <!-- <div class="loading"></div>
+                <div class = "status">获取摄像头状态</div> -->
+                </div>
+              </div>
+            </div>
+            <div class="dd-addr">
+              <label class="camlabel">摄像头地址</label>
+              <input id="path" class="input-css" type="text" name="dd-addr" />
+            </div>
+            <div class="dd-checkbox">
+              <label class="cb-container"
+                >高风险
+                <input id="highRisk" type="checkbox" />
+                <span class="checkmark"></span>
+              </label>
+              <label class="cb-container"
+                >来自视频源
+                <input id="fromVideo" type="checkbox" />
+                <span class="checkmark"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="content-wrapper hoverable">
+          <h5>详细功能配置，可多选</h5>
+          <div class="columns">
+            <div class="checkbox halfwid">
+              <label class="cb-container"
+                >翻越周界
+                <input id="climb" type="checkbox" />
+                <span class="checkmark"></span>
+              </label>
+              <label class="cb-container"
+                >异常
+                <input id="abnormal" type="checkbox" />
+                <span class="checkmark"></span>
+              </label>
+              <label class="cb-container"
+                >打架
+                <input id="fight" type="checkbox" />
+                <span class="checkmark"></span>
+              </label>
+              <label class="cb-container"
+                >睡觉
+                <input id="sleep" type="checkbox" />
+                <span class="checkmark"></span>
+              </label>
+            </div>
+            <div class="checkbox halfwid">
+              <label class="cb-container"
+                >枪支
+                <input id="gun" type="checkbox" />
+                <span class="checkmark"></span>
+              </label>
+              <label class="cb-container"
+                >计数
+                <input id="count" type="checkbox" />
+                <span class="checkmark"></span>
+              </label>
+              <label class="cb-container"
+                >纵火
+                <input id="fire" type="checkbox" />
+                <span class="checkmark"></span>
+              </label>
+              <label class="cb-container"
+                >群体行为
+                <input id="crowd_action" type="checkbox" />
+                <span class="checkmark"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="content-wrapper hoverable">
+          <h5 style="margin-bottom: 10px;">人威胁等级</h5>
+          <div>
+            <label class="rd-container"
+              >无
+              <input type="radio" checked="checked" name="person" value="0" />
+              <span class="rd-checkmark"></span>
+            </label>
+            <label class="rd-container"
+              >低
+              <input type="radio" name="person" value="1" />
+              <span class="rd-checkmark"></span>
+            </label>
+            <label class="rd-container"
+              >中
+              <input type="radio" name="person" value="2" />
+              <span class="rd-checkmark"></span>
+            </label>
+            <label class="rd-container"
+              >高
+              <input type="radio" name="person" value="3" />
+              <span class="rd-checkmark"></span>
+            </label>
+          </div>
+          <h5 style="margin-bottom: 10px;">车威胁等级</h5>
+          <div>
+            <div>
+              <label class="rd-container"
+                >无
+                <input type="radio" checked="checked" name="car" value="0" />
+                <span class="rd-checkmark"></span>
+              </label>
+              <label class="rd-container"
+                >低
+                <input type="radio" name="car" value="1" />
+                <span class="rd-checkmark"></span>
+              </label>
+              <label class="rd-container"
+                >中
+                <input type="radio" name="car" value="2" />
+                <span class="rd-checkmark"></span>
+              </label>
+              <label class="rd-container"
+                >高
+                <input type="radio" name="car" value="3" />
+                <span class="rd-checkmark"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="submit-wrapper">
+          <button class="btn" onclick="handleSubmit()">启 动</button>
+          <button
+            style="background: #ed5a63;"
+            class="btn"
+            onclick="handleStop()"
+          >
+            终止运行
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="bg-wrapper">
+      <img class="bg" src="static/svg/bg_01.svg" />
+      <img class="bg" src="static/svg/bg_02.svg" />
+      <img class="bg" src="static/svg/bg_01.svg" />
+    </div>
+  </body>
+</html>

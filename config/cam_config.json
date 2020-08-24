@@ -1,0 +1,17 @@
+{
+    "0":"/home/fudan/lyl/video/climb_2.MTS",
+    "1":"rtsp://admin:guan0123*@192.168.50.212:554/Streaming/Channels/101",
+    "2":"rtsp://admin:guan0123*@192.168.50.213:554/Streaming/Channels/101",
+    "3":"rtsp://admin:guan0123*@192.168.50.214:554/Streaming/Channels/101",
+    "4":"rtsp://admin:guan0123*@192.168.50.215:554/Streaming/Channels/101",
+	"5":"rtsp://admin:qwer1234@192.168.50.64:554/id1",
+    "6":"rtsp://admin:qwer1234@192.168.50.65:554/id1",
+    "7":"rtsp://admin:guan0123*@192.168.50.216:554/Streaming/Channels/101",
+    "8":"rtsp://admin:guan0123*@192.168.50.217:554/Streaming/Channels/101",
+    "9":"rtsp://admin:guan0123*@192.168.50.220:554/Streaming/Channels/101",
+    "10":"rtsp://admin:admin123@192.168.50.101:554/id0",
+	"11":"rtsp://admin:qwer1234@192.168.50.170:554/id1",
+    "13":"rtsp://admin:12345678y@192.168.50.17/h264/ch1/main/av_stream",
+    "14":"rtsp://admin:guan0123*@192.168.50.218:554/Streaming/Channels/101",
+    "15":"rtsp://admin:guan0123*@192.168.50.219:554/Streaming/Channels/101"
+}

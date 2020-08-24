@@ -1,0 +1,17 @@
+{
+    "read_video":true,
+    "cam_id":10,
+    "url":"/home/fudan/lyl/video/crowd_action/cjss1.mp4",
+    "find_person":1,
+    "find_car":1,
+    "enter_field":2,
+    "enter_kernel":3,
+    "docker_climb":false,
+    "docker_abnormal":false,
+    "docker_fight":false,
+    "docker_fire":false,
+    "docker_gun":false,
+    "docker_count":false,
+    "docker_sleep":true,
+    "docker_crowd_action":true
+}

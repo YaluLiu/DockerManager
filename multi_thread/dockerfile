@@ -1,0 +1,14 @@
+from python:3.6
+
+COPY config  /home/config
+COPY multi_thread /home/multi_thread
+
+RUN pip install flask \
+    && pip install flask-cors \
+    && pip install opencv-python \
+    && pip install numpy \
+    && pip install requests
+
+WORKDIR      /home/multi_thread
+ENTRYPOINT   ["python"]
+CMD          ["auto_start.py"]

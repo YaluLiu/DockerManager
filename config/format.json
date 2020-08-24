@@ -1,0 +1,29 @@
+{
+    "camera_id": 1,
+    "time_stamp": "",
+    "has_image": false,
+    "image_path": "",
+    "error": "",
+    "action_analysis_result":{
+        "intrusion":{
+                "status": false,
+                "area": []
+            },
+        "guns": {
+            "status": false,
+            "area": []
+            },
+        "fire":{
+            "status":false,
+            "area": []
+        },
+        "fighting": false,
+        "destroy_camera": false,
+        "sleep":"",
+        "crowd_number": 0,
+        "crowd_abnormal": false,
+        "crowd_behavior": [],
+        "threat_level": "low"
+    },
+    "object_recognition_result": []
+}
