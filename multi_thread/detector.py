@@ -3,7 +3,6 @@ import numpy as np
 import json
 import requests
 
-# config_host = "192.168.200.233"
 config_host = "localhost"
 
 class detector(object):

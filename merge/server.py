@@ -44,18 +44,27 @@ def init_threat_cfg(threat_cfg):
             "find_car":1,
             "gun":3,
             "fire":3,
-            "fighting":2
+            "fighting":2,
+            "crowd_behavior":1,
+            "sleep":1,
+            "intrusion":1
         }
 
 def check_FU_threat(data):
     global threat_cfg
 
+    cam_id = data["camera_id"]
+    data = data["action_analysis_result"]
     if data["guns"]["status"]:
         return threat_cfg[cam_id]["gun"]
     if data["fire"]["status"]:
         return threat_cfg[cam_id]["fire"]
     if data["fighting"]:
         return threat_cfg[cam_id]["fighting"]
+    if data["sleep"] != 0:
+        return  threat_cfg["sleep"]
+    if len(data["crowd_behavior"]) != 0:
+        return  threat_cfg["crowd_behavior"]
     return 0
 
 def check_TJU_threat(TJU_datas):
@@ -78,16 +87,19 @@ def check_TJU_threat(TJU_datas):
     return threat_level
     
 def check_all(data):
+    print(data)
+    return 0
+
     TJU_level = check_TJU_threat(data["TJU"])
-    FU_level = check_FU_threat(data["action_analysis_result"])
+    FU_level = check_FU_threat(data)
     max_level = max(TJU_level,FU_level)
-    if TJU_level == 0:
-        max_level = 0
+    # if TJU_level == 0:
+    #     max_level = 0
     threat_str = ["no","low","mid","high"]
     data["action_analysis_result"]["threat_level"] = threat_str[max_level]
     return max_level
 
-@app.route('/api_get_TJUdata/<id>' , methods=['POST'])
+@app.route('/api_get_TJUdata/<id>', methods=['POST'])
 def api_get_TJUdata(id):
     global TJU_data
     cam_id = int(id)
@@ -95,26 +107,32 @@ def api_get_TJUdata(id):
     TJU_data[cam_id] = get_data
     return jsonify("ok")
 
-@app.route('/api_get_violence/<id>' , methods=['POST'])
-def api_get_violence(id):
+@app.route('/api_get_FUdata/<id>', methods=['POST'])
+def api_get_FUdata(id):
     global TJU_data
-    cam_id = int(id)
-    violence_data = request.json
+    merge_data = request.json
+    cam_id = int(merge_data["camera_id"])
+    
     if len(TJU_data[cam_id]) == 0:
-        violence_data["TJU"] = []
+        merge_data["TJU"] = []
     else:
-        violence_data["TJU"] = TJU_data[cam_id]
-        assert(TJU_data[cam_id][0]["equipment_id"] == cam_id)
+        merge_data["TJU"] = TJU_data[cam_id]
+        # assert(merge_data[cam_id][0]["equipment_id"] == cam_id)
+
+    print_json(merge_data)
+
     # reset it to empty after use it
     TJU_data[cam_id] = []
     return jsonify("ok")
 
-@app.route('/api_update_cfg/<id>' , methods=['POST'])
+@app.route('/api_update_cfg' , methods=['POST'])
 def api_update_cfg(id):
     global threat_cfg
-    cam_id = int(id)
     cfg_data = request.json
-    threat_cfg[cam_id] = cfg_data
+    cam_id = int(cfg_data["cam_id"])
+    threat_cfg[cam_id]["find_person"] = cfg_data["find_person"]
+    threat_cfg[cam_id]["find_car"] = cfg_data["find_car"]
+    print(threat_cfg[cam_id])
     return jsonify("ok")
 
 

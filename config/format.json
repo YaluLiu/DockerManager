@@ -19,7 +19,7 @@
         },
         "fighting": false,
         "destroy_camera": false,
-        "sleep":"",
+        "sleep":false,
         "crowd_number": 0,
         "crowd_abnormal": false,
         "crowd_behavior": [],
