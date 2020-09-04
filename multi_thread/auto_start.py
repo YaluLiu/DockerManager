@@ -44,7 +44,8 @@ def api_get_cam_lst():
 
 @app.route('/api_get_video_lst' , methods=['GET'])
 def api_get_video_lst():
-    video_dir = "/home/fudan/lyl/test_video"
+    global local_cfg
+    video_dir = local_cfg["test_video_dir"]
     video_json = find_all_videos(video_dir)
     return jsonify(video_json)
 
@@ -91,4 +92,7 @@ def api_stop(cam_id):
 
 if __name__ == '__main__':
     cam_group = [None] * 50
+    json_path = "../config/local_cfg.json"
+    with open(json_path,"r") as f:
+        local_cfg = json.load(f)
     app.run(debug=False, host='0.0.0.0', port=7009,threaded=False)
