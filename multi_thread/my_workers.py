@@ -326,7 +326,7 @@ class slowfast_worker(MyBasicThread):
                 continue
 #=============================7008===============================================================
 class alphapose_worker():
-    def __init__(self,flag_detect_climb):
+    def __init__(self,flag_detect_climb = False):
         self.detector = alphapose_detector()
         self.rq = queue.Queue(maxsize = 10)
         # self.mask = None

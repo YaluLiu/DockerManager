@@ -13,15 +13,17 @@ class worker_group(multiprocessing.Process):
         self.exit = multiprocessing.Event()
 
     def read_cfg(self,cfg):
+        # id of camera,if use local video it's zero
+        self.cam_id  = cfg["cam_id"]
+
         # test function by local video
-        self.use_test_video = cfg["read_video"]
+        self.use_test_video = self.cam_id == 0
         self.video_path = cfg["video_path"]
 
         # test function by online-camera
         self.cam_url = cfg["cam_url"]
 
-        # id of camera,if use local video it's zero
-        self.cam_id  = cfg["cam_id"]
+
 
         # set url of server
         self.merge_url = 'http://{}:6666/api_get_FUdata/{}'.format("localhost",self.cam_id)
@@ -31,22 +33,39 @@ class worker_group(multiprocessing.Process):
         self.flag_print = True
 
         self.workers = []
+
+        flag_need_person_detect = False
+
         if cfg["docker_climb"]:
             self.workers.append(alphapose_worker(cfg["docker_climb"]))
+        
         if cfg["docker_abnormal"]:
             self.workers.append(abnormal_worker())
+            flag_need_person_detect = True
+
         if cfg["docker_fight"]:
             self.workers.append(slowfast_worker())
-        if cfg["docker_gun"]:
-            self.workers.append(firearm_worker())
+            flag_need_person_detect = True
+
         if cfg["docker_count"]:
             self.workers.append(count_worker())
+            flag_need_person_detect = True
+
+        if cfg["docker_gun"]:
+            self.workers.append(firearm_worker())
+
         if cfg["docker_fire"]:
             self.workers.append(fire_worker())
+
         if cfg["docker_sleep"]:
             self.workers.append(sleep_worker())
+
         if cfg["docker_crowd_action"]:
             self.workers.append(crowd_action_worker())
+        
+        if flag_need_person_detect and cfg["docker_climb"] is False:
+            self.workers.append(alphapose_worker())
+
         self.dockers_num = len(self.workers)
 
 

@@ -1,1 +1,15 @@
-{"cam_id": 0, "cam_url": "", "detect_sleep": true, "docker_abnormal": false, "docker_climb": false, "docker_count": false, "docker_crowd_action": false, "docker_fight": false, "docker_fire": false, "docker_gun": false, "docker_sleep": true, "find_car": 0, "find_person": 0, "read_video": true, "video_path": "/home/fudan/lyl/test_video/crowd_action/zj/zj4.mp4"}
+{
+    "cam_id": 0,
+    "video_path": "/home/fudan/lyl/test_video/sleep/sleep_eye.mp4",
+    "cam_url": "rtsp://admin:guan0123*@192.168.50.212:554/Streaming/Channels/101",
+    "find_car": 1,
+    "find_person": 1,
+    "docker_climb": false,
+    "docker_abnormal": false,
+    "docker_fight": false,
+    "docker_gun": false,
+    "docker_count": false,
+    "docker_fire": false,
+    "docker_sleep": true,
+    "docker_crowd_action": false
+}

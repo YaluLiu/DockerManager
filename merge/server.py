@@ -25,8 +25,6 @@ def print_json(data):
     print(json.dumps(data, indent=4, sort_keys=True))
 
 def push_json(data):
-    if check_all(data) == 0:
-        return 
     url = "http://192.168.50.100:8092/pushAnalysisInfo"
     try:
         r = requests.post(url, json=data)
@@ -47,27 +45,46 @@ def init_threat_cfg(threat_cfg):
             "fighting":2,
             "crowd_behavior":1,
             "sleep":1,
-            "intrusion":1
+            "intrusion":1,
+            "destroy_camera": 1,
+            "crowd_abnormal": 1,
         }
 
 def check_FU_threat(data):
     global threat_cfg
 
     cam_id = data["camera_id"]
+    cam_cfg = threat_cfg[cam_id]
     data = data["action_analysis_result"]
+
+    # High
     if data["guns"]["status"]:
-        return threat_cfg[cam_id]["gun"]
+        return cam_cfg["gun"]
     if data["fire"]["status"]:
-        return threat_cfg[cam_id]["fire"]
+        return cam_cfg["fire"]
+    
+    # Mid
     if data["fighting"]:
-        return threat_cfg[cam_id]["fighting"]
-    if data["sleep"] != 0:
-        return  threat_cfg["sleep"]
+        return cam_cfg["fighting"]
+
+    # Low
+    if data["intrusion"]["status"]:
+        return cam_cfg["intrusion"]
+    if data["sleep"]:
+        return  cam_cfg["sleep"]
+    if data["destroy_camera"]:
+        return  cam_cfg["destroy_camera"]
+    if data["crowd_abnormal"]:
+        return  cam_cfg["crowd_abnormal"]
     if len(data["crowd_behavior"]) != 0:
-        return  threat_cfg["crowd_behavior"]
+        return  cam_cfg["crowd_behavior"]
+
     return 0
 
 def check_TJU_threat(TJU_datas):
+    if len(TJU_datas) == 0:
+        return 0,False
+    
     global threat_cfg
     ret = {"person":False,"car":False}
     for data in TJU_datas:
@@ -75,8 +92,10 @@ def check_TJU_threat(TJU_datas):
         cam_id = data["equipment_id"]
     
     threat_level = 0
+    find_nothing = False
     if ret["person"] == False and ret["car"] == False:
         threat_level = 0
+        find_nothing = True
     elif ret["person"] == True and ret["car"] == False:
         threat_level = threat_cfg[cam_id]["person"]
     elif ret["person"] == True and ret["car"] == False:
@@ -84,17 +103,16 @@ def check_TJU_threat(TJU_datas):
     else:
         threat_level = max(threat_cfg["person"], threat_cfg["person"])
 
-    return threat_level
+    return threat_level,find_nothing
     
-def check_all(data):
-    print(data)
-    return 0
-
-    TJU_level = check_TJU_threat(data["TJU"])
-    FU_level = check_FU_threat(data)
-    max_level = max(TJU_level,FU_level)
-    # if TJU_level == 0:
-    #     max_level = 0
+def check_all_threat(data):
+    TJU_level,find_nothing = check_TJU_threat(data["TJU"])
+    if len(data["TJU"]) != 0 and find_nothing:
+        max_level = 0
+    else:
+        FU_level = check_FU_threat(data)
+        max_level = max(TJU_level,FU_level)
+    
     threat_str = ["no","low","mid","high"]
     data["action_analysis_result"]["threat_level"] = threat_str[max_level]
     return max_level
@@ -117,22 +135,23 @@ def api_get_FUdata(id):
         merge_data["TJU"] = []
     else:
         merge_data["TJU"] = TJU_data[cam_id]
-        # assert(merge_data[cam_id][0]["equipment_id"] == cam_id)
 
-    print_json(merge_data)
+    threat_level = check_all_threat(merge_data)
+    if threat_level > 0:
+        print_json(merge_data)
+        # push_json(merge_data)
 
     # reset it to empty after use it
     TJU_data[cam_id] = []
     return jsonify("ok")
 
 @app.route('/api_update_cfg' , methods=['POST'])
-def api_update_cfg(id):
+def api_update_cfg():
     global threat_cfg
     cfg_data = request.json
     cam_id = int(cfg_data["cam_id"])
     threat_cfg[cam_id]["find_person"] = cfg_data["find_person"]
     threat_cfg[cam_id]["find_car"] = cfg_data["find_car"]
-    print(threat_cfg[cam_id])
     return jsonify("ok")
 
 

@@ -18,7 +18,7 @@ def update_cfg(cfg_data,cam_id):
     port = 6666
     api = "api_update_cfg"
     # print(cfg_data)
-    url = "http://{}:{}/{}/{}".format(host,port,api,cam_id)
+    url = "http://{}:{}/{}".format(host,port,api)
     try:
         r = requests.post(url, json=cfg_data)
         if r.status_code == 200:
@@ -28,7 +28,7 @@ def update_cfg(cfg_data,cam_id):
     except Exception as e:
         print(e)
 
-@app.route('/api_get_state/<cam_id>' , methods=['GET'])
+@app.route('/api_get_state/<cam_id>', methods=['GET'])
 def api_get_state(cam_id):
     global cam_group
     cam_id = int(cam_id)
@@ -71,7 +71,7 @@ def api_start():
 
     json_path = "../config/start_cfg.json"
     with open(json_path,"w") as f:
-        json.dump(cfg,f)
+        json.dump(cfg,f,indent=4)
 
     p = worker_group()
     p.read_cfg(cfg)

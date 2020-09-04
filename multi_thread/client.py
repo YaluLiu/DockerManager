@@ -91,7 +91,6 @@ if __name__ == '__main__':
     # print(video_list)
 
     cfg["cam_id"] = start_cam_id
-    cfg["read_video"] = True
     cfg["docker_sleep"] = True
     cfg["video_path"] = "/home/fudan/lyl/test_video/crowd_action/zj/zj4.mp4"
 
