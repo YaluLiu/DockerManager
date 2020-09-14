@@ -4,6 +4,10 @@ import requests
 import time
 import os 
 
+
+frame_per_second = 20
+
+
 def speed_test(sec):
     if not hasattr(speed_test, 'start_time'):
         speed_test.start_time = time.time()

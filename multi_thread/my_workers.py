@@ -5,6 +5,7 @@ import time
 import queue
 from threading import Thread
 from detector import *
+from utils import frame_per_second
 
 # 每秒一个json，如果画面中没有人，可以特殊处理
 # json中无特殊情况，不push
@@ -141,14 +142,14 @@ class climb_worker():
         frame_idx = data["frame_idx"]
         # if frame_idx == 1:
         #     self.update_mask(data["frame"])
-        # if frame_idx % 24 == 12:
+        # if frame_idx % frame_per_second == frame_per_second//2:
         #     response = self.detector.detect(data["frame"])
         #     data["person_num"] = len(response)
         #     response = self.make_response(response)
         #     if len(response["climb_data"]) > 0:
         #         self.pre_climb = True
         
-        if frame_idx % 24 == 0:
+        if frame_idx % frame_per_second == 1:
             response = self.detector.detect(data["frame"])
             data["person_num"] = len(response)
             response = self.make_response(response)
@@ -175,7 +176,7 @@ class abnormal_worker(MyBasicThread):
             #print("reset_flow:",ret)
         # workon every frame
         self.detector.detect(data["frame"])
-        if data["frame_idx"] % 24 == 0:
+        if data["frame_idx"] % frame_per_second == 1:
             self.fq.put(data)
 
     def run(self):
@@ -217,7 +218,7 @@ class firearm_worker(MyBasicThread):
         act_json["guns"]["status"] = len(act_json["guns"]["area"]) > 0
 
     def solve_frame(self,data):
-        if data["frame_idx"] % 24 == 0:
+        if data["frame_idx"] % frame_per_second == 1:
             self.fq.put(data)
 
     def run(self):
@@ -244,7 +245,7 @@ class count_worker(MyBasicThread):
         act_json["crowd_number"] = response["crowd_count"]
 
     def solve_frame(self,data):
-        if data["frame_idx"] % 24 == 0:
+        if data["frame_idx"] % frame_per_second == 1:
             self.fq.put(data)
 
     def run(self):
@@ -274,7 +275,7 @@ class fire_worker(MyBasicThread):
         act_json["fire"]["status"] = response["fire"]["status"] == 'yes'
 
     def solve_frame(self,data):
-        if data["frame_idx"] % 24 == 0:
+        if data["frame_idx"] % frame_per_second == 1:
             self.fq.put(data)
 
     def run(self):
@@ -388,7 +389,7 @@ class alphapose_worker():
     def solve_frame(self,data):
         frame_idx = data["frame_idx"]
         
-        if frame_idx % 24 == 0:
+        if frame_idx % frame_per_second == 1:
             response = self.detector.detect(data["frame"])
             data["person_num"] = len(response)
             response = self.make_response(response)
@@ -407,7 +408,7 @@ class crowd_action_worker(MyBasicThread):
 
 
     def solve_frame(self,data):
-        if data["frame_idx"] % 24 == 0:
+        if data["frame_idx"] % frame_per_second == 1:
             self.fq.put(data)
 
     def run(self):
@@ -448,7 +449,7 @@ class sleep_worker(MyBasicThread):
             act_json["sleep"] = False
 
     def solve_frame(self,data):
-        if data["frame_idx"] % 12 == 0:
+        if data["frame_idx"] % frame_per_second == 1:
             self.fq.put(data)
 
     def run(self):

@@ -87,7 +87,7 @@ class worker_group(multiprocessing.Process):
             if data is None:
                 break
 
-            if data["frame_idx"] % 24 == 0 and data["frame_idx"] > 48:
+            if data["frame_idx"] % frame_per_second == 0 and data["frame_idx"] > (frame_per_second * 2):
                 ret_json = get_default_json()
                 ret_json["camera_id"] = self.cam_id
                 act_json = ret_json["action_analysis_result"]
