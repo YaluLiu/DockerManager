@@ -439,11 +439,11 @@ class sleep_worker(MyBasicThread):
             if response['find_face']:
                 eye_aspect_ratio += response['Lear'] + response['Rear']
             else:
-                eye_aspect_ratio += 0.25
+                eye_aspect_ratio += 0.31
 
         if frame_num == 0:
             act_json["sleep"] = False
-        elif eye_aspect_ratio/frame_num < 0.23:
+        elif eye_aspect_ratio/frame_num < 0.31:
             act_json["sleep"] = True
         else:
             act_json["sleep"] = False

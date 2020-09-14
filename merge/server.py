@@ -53,7 +53,7 @@ def init_threat_cfg(threat_cfg):
 def check_FU_threat(data):
     global threat_cfg
 
-    cam_id = data["camera_id"]
+    cam_id = int(data["camera_id"])
     cam_cfg = threat_cfg[cam_id]
     data = data["action_analysis_result"]
 
@@ -139,7 +139,7 @@ def api_get_FUdata(id):
     threat_level = check_all_threat(merge_data)
     if threat_level > 0:
         print_json(merge_data)
-        # push_json(merge_data)
+        push_json(merge_data)
 
     # reset it to empty after use it
     TJU_data[cam_id] = []
